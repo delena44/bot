@@ -12,7 +12,6 @@ import requests
 # Запускаем базу данных
 bd.connect()
 
-
 name = ""
 password = ""
 now = datetime.datetime.now()
@@ -25,15 +24,15 @@ newsapi = NewsApiClient(api_key=api_key_news)
 bot = telebot.TeleBot("5083161259:AAG7ceMBNypx5NOsRpgZkMOOtgnNmfQLHcQ")
 
 # С помощью данных функций наш бот может нас приветствовать.
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start', 'help', 'Привет'])
 def send_welcome(message):
-        bot.reply_to(message, "Приветик")
+        bot.reply_to(message, "Приветик, что ты хочешь посмотреть?\n\nВведи Регистрация, если хочешь зарегистрироваться\nВведи Войти, если хочешь войти в свой кабинет\n")
 
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
         if message.text == "Регистрация":
-                bot.send_message(message.chat.id, "Приветик, познакомимся? Давай вместе придумаем пароль")
+                bot.send_message(message.chat.id, "Познакомимся? Давай вместе придумаем пароль. Введи свой пароль тут ↓")
                 bot.register_next_step_handler(message, register)
 
         elif(message.text == "Войти"):
@@ -113,14 +112,13 @@ def deleteSubs(message):
 def register(message):
         password = message.text
 
-        url='http://127.0.0.1:5007/register'
         data={
                 'user_id': message.from_user.id,
                 'name' : f'{message.from_user.first_name}',
                 'password' : password,
         }
 
-        response = requests.post(url, data)
+        response = requests.post('http://127.0.0.1:5007/register', data)
 
         if response.status_code == 200:
                 bot.send_message(message.chat.id, "Вы уже регистрировались")
@@ -139,6 +137,9 @@ def auth(message):
 
         if response.status_code == 200:
                 bot.send_message(message.chat.id, "Вы вошли в систему")
+        elif response.status_code == 201:
+                bot.send_message(message.chat.id, "Пароль введен неверно")
+
 
 # Смотрим наши новости
 def news(message):

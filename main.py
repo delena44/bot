@@ -30,7 +30,7 @@ def register():
         if reg == 1:
             return jsonify({'is_registered': True}), 200
         else:
-            bd.reg(request.form['user_id'],  request.form['name'], request.form['password'])
+            bd.register(request.form['user_id'],  request.form['name'], request.form['password'])
             return jsonify({'is_registered': True}), 201
     
     except Exception as e:
@@ -46,7 +46,7 @@ def auth():
     except Exception as e:
         print(f"Ошибка: {e}")
 
-# Команда регистрации пользователя
+
 @app.route("/subscrs", methods=["GET", "POST"])
 def subscr():
     try:

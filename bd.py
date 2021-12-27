@@ -60,7 +60,7 @@ def register(user_id, login, password):
         try:
                 con = sqlite3.connect("users.db")
                 cursor = con.cursor()
-                cursor.execute(""" INSERT INTO users(user_id, name, password) VALUES (?, ?, ?);                 """, (user_id, login, password))
+                cursor.execute(""" INSERT INTO users(user_id, name, password) VALUES (?, ?, ?);""", (user_id, login, password))
                 con.commit()
                 print("Вы зарегистрированы")
                 return "Вы зарегистрированы :)"       
@@ -76,7 +76,7 @@ def auth(user_id, password):
         print("Вход в систему")
         con = sqlite3.connect("users.db")
         cursor = con.cursor()
-        info = cursor.execute("""SELECT * FROM users WHERE user_id = ? AND password = ?""",                               (user_id, password,)).fetchall()
+        info = cursor.execute("""SELECT * FROM users WHERE user_id = ? AND password = ?""",(user_id, password,)).fetchall()
         print("Вы вошли в систему :)")
 
 # Метод, позволяющий посмотреть в бд, есть ли такой пользователь.
@@ -84,7 +84,7 @@ def tabUser(user_id):
         try:
                 con = sqlite3.connect("users.db")
                 cursor = con.cursor()
-                user = cursor.execute("""SELECT user_id FROM users where user_id = ?""",                        (user_id,)).fetchone()
+                user = cursor.execute("""SELECT user_id FROM users where user_id = ?""",(user_id,)).fetchone()
                 print(user)
                 if not user:
                         return 0
